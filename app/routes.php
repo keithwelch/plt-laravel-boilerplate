@@ -13,5 +13,15 @@
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('home');
 });
+
+Route::get('/dashboard', function()
+{
+  return View::make('dashboard')->withPagetitle('Dashboard');
+})->before('auth');
+
+Route::get('login', 'SessionsController@create');
+Route::get('logout', 'SessionsController@destroy');
+
+Route::resource('sessions', 'SessionsController', array('only'=>array('create', 'store', 'destroy')));
