@@ -29,7 +29,11 @@ class SessionsController extends \BaseController {
     );
 
     if ($attempt) return Redirect::intended('/dashboard');
-    dd('failed login');
+
+    Session::flash('loginError', 'Invalid username or password.');
+
+    return Redirect::to('/login');
+
 	}
 
 	/**

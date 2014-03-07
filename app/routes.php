@@ -24,4 +24,8 @@ Route::get('/dashboard', function()
 Route::get('login', 'SessionsController@create');
 Route::get('logout', 'SessionsController@destroy');
 
+Route::get('signup', 'UsersController@create');
+Route::get('profile/edit', 'UsersController@edit');
+
 Route::resource('sessions', 'SessionsController', array('only'=>array('create', 'store', 'destroy')));
+Route::resource('users', 'UsersController', array('only'=>array('create', 'store', 'edit', 'update')));
