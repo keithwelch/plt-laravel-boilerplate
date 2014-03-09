@@ -2,24 +2,55 @@
 
 class UsersController extends \BaseController {
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
+  protected $whitelist=array(
+    'getLogin',
+    'postLogin',
+    'getSignup',
+    'postSignup',
+  );
+
+  public function __construct()
+  {
+    $this->beforeFilter('csrf', array('on' => array('post')));
+    $this->beforeFilter('auth', array('except' => $this->whitelist));
+  }
+
+	public function getIndex()
 	{
-		return View::make('users.create')->withPagetitle('Sign up');
+    return View::make('user.dashboard')->withTitle('Dashboard');
 	}
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
-	 * @return Response
-	 */
-	public function store()
+  public function getLogin()
+  {
+		return View::make('user.login')->withTitle('Login');
+  }
+
+  public function postLogin()
+  {
+    $input = Input::all();
+
+    $attempt = Auth::attempt(
+      array(
+        'email' => $input['email'],
+        'password' => $input['password'],
+      ),
+      isset($input['remember-me']) ? true : false
+    );
+
+    if ($attempt) return Redirect::intended('dashboard');
+
+    Session::flash('loginError', 'Invalid username or password.');
+
+    return Redirect::route('user.login');
+  }
+
+  public function getSignup()
+  {
+		return View::make('user.signup')->withTitle('Sign up');
+  }
+
+	public function postSignup()
 	{
-    if (Auth::check()) return Redirect::to('/');
     $input = Input::all();
     $validation = Validator::make($input, User::$rules);
 
@@ -30,35 +61,19 @@ class UsersController extends \BaseController {
         $user->password=Hash::make($input['password']);
         $user->save();
 
-        return Redirect::to('/login');
+        return Redirect::route('user.login');
     }
 
-    return Redirect::to('/signup')
+    return Redirect::route('user.signup')
       ->withInput()
       ->withErrors($validation);
 
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit()
-	{
-    if (!Auth::check()) return Redirect::to('login');
-	}
-
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function update()
-	{
-    if (!Auth::check()) return Redirect::to('login');
-	}
+  public function getLogout()
+  {
+    Auth::logout();
+    return Redirect::route('home');
+  }
 
 }

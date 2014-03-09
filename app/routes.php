@@ -11,21 +11,21 @@
 |
 */
 
-Route::get('/', function()
+Route::get('/', array('as' => 'home', function()
 {
 	return View::make('home');
-});
+}));
 
-Route::get('/dashboard', function()
-{
-  return View::make('dashboard')->withPagetitle('Dashboard');
-})->before('auth');
-
-Route::get('login', 'SessionsController@create');
-Route::get('logout', 'SessionsController@destroy');
-
-Route::get('signup', 'UsersController@create');
-Route::get('profile/edit', 'UsersController@edit');
-
-Route::resource('sessions', 'SessionsController', array('only'=>array('create', 'store', 'destroy')));
-Route::resource('users', 'UsersController', array('only'=>array('create', 'store', 'edit', 'update')));
+Route::controller('user', 'UsersController', array(
+  'getLogin' => 'user.login',
+  'postLogin' => 'user.login.post',
+  'getSignup' => 'user.signup',
+  'postSignup' => 'user.signup.post',
+  'getLogout' => 'user.logout',
+));
+// Had to add this to get named route correct
+Route::get('dashboard', array('as' => 'user.dashboard', 'uses' => 'UsersController@getIndex'));
+Route::controller('password', 'RemindersController', array(
+  'getRemind' => 'password.remind',
+  'postRemind' => 'password.remind.post', 
+));

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>{{{ isset($pagetitle) ? $pagetitle.' | ' : '' }}}{{{ Config::get('site.sitename') }}}</title>
+  <title>{{{ isset($title) ? $title.' | ' : '' }}}{{{ Config::get('site.sitename') }}}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 @if (!empty($description))
   <meta name="description" content="{{ $description }}">
@@ -21,12 +21,13 @@
   <div class="container">
     <div class="header">
       <ul class="nav nav-pills pull-right">
-        <li @if (Request::is('/')) class="active" @endif><a href="/">Home</a></li>
+        <li @if (Route::currentRouteName()=='home') class="active" @endif><a href="{{ URL::route('home') }}">Home</a></li>
 @if (Auth::check())
-        <li @if (Request::is('dashboard')) class="active" @endif><a href="/dashboard">Dashboard</a></li>
-        <li><a href="logout">Logout</a></li>
+        <li @if (Route::currentRouteName()=='user.dashboard') class="active" @endif><a href="{{ URL::route('user.dashboard') }}">Dashboard</a></li>
+        <li><a href="{{ URL::route('user.logout') }}">Logout</a></li>
 @else
-        <li @if (Request::is('login')) class="active" @endif><a href="/login">Login</a></li>
+        <li @if (Route::currentRouteName()=='user.signup') class="active" @endif><a href="{{ URL::route('user.signup') }}">Sign up</a></li>
+        <li @if (Route::currentRouteName()=='user.login') class="active" @endif><a href="{{ URL::route('user.login') }}">Login</a></li>
 @endif
       </ul>
       <h3 class="text-muted">{{{ Config::get('site.sitename') }}}</h3>
