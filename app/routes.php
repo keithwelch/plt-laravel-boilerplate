@@ -29,3 +29,8 @@ Route::controller('password', 'RemindersController', array(
   'getRemind' => 'password.remind',
   'postRemind' => 'password.remind.post', 
 ));
+
+Route::group(array('prefix' => 'admin', 'before' => 'admin'), function()
+{
+  Route::resource('users', 'AdminUsersController');
+});

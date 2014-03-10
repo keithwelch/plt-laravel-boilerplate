@@ -79,3 +79,10 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('admin', function()
+{
+	#if (Auth::guest()) return Redirect::guest('login');
+	if (Auth::guest()) return Redirect::route('user.login');
+  if (!Auth::user()->is_admin) return Redirect::route('user.dashboard');
+});

@@ -33,15 +33,18 @@ class UsersController extends \BaseController {
       array(
         'email' => $input['email'],
         'password' => $input['password'],
+        'is_active' => 1,
       ),
       isset($input['remember-me']) ? true : false
     );
 
     if ($attempt) return Redirect::intended('dashboard');
 
-    Session::flash('loginError', 'Invalid username or password.');
+    $error = 'Invalid username or password.';
+    $user = User::where('email', '=', $input['email']);
+    if (count($user)) $error='Your account is inactive';
 
-    return Redirect::route('user.login');
+    return Redirect::route('user.login')->with('loginError', $error);
   }
 
   public function getSignup()
@@ -59,6 +62,7 @@ class UsersController extends \BaseController {
         $user = new User;
         $user->email=$input['email'];
         $user->password=Hash::make($input['password']);
+        $user->is_active=true;
         $user->save();
 
         return Redirect::route('user.login');

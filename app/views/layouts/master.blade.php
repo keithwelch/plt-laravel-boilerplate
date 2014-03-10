@@ -24,6 +24,9 @@
         <li @if (Route::currentRouteName()=='home') class="active" @endif><a href="{{ URL::route('home') }}">Home</a></li>
 @if (Auth::check())
         <li @if (Route::currentRouteName()=='user.dashboard') class="active" @endif><a href="{{ URL::route('user.dashboard') }}">Dashboard</a></li>
+@if (Auth::user()->is_admin)
+        <li @if (starts_with(Route::currentRouteName(), 'admin.users')) class="active" @endif><a href="{{ URL::route('admin.users.index') }}">Edit Users</a></li>
+@endif
         <li><a href="{{ URL::route('user.logout') }}">Logout</a></li>
 @else
         <li @if (Route::currentRouteName()=='user.signup') class="active" @endif><a href="{{ URL::route('user.signup') }}">Sign up</a></li>
