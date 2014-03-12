@@ -21,6 +21,8 @@ Route::controller('user', 'UsersController', array(
   'postLogin' => 'user.login.post',
   'getSignup' => 'user.signup',
   'postSignup' => 'user.signup.post',
+  'getAccount' => 'user.account',
+  'postAccount' => 'user.account.post',
   'getLogout' => 'user.logout',
 ));
 // Had to add this to get named route correct

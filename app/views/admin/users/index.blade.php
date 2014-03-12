@@ -2,11 +2,24 @@
 
 @section('content')
 
-<h1>All Users</h1>
+<h1>Manage Users</h1>
+@if (Session::has('status'))
+<div class="alert alert-success">{{ Session::get('status') }}</div>
+@endif
 
 <p>{{ link_to_route('admin.users.create', 'Add new user') }}</p>
 
+<p>
+  <strong>Filters</strong><br/>
+  {{ link_to_route('admin.users.index', 'Show All Users') }}<br/>
+  {{ link_to_route('admin.users.index', 'Show Admins', array('admin' => 1)) }}<br/>
+  {{ link_to_route('admin.users.index', 'Show Active', array('active' => 1)) }}
+</p>
 @if ($users->count())
+    {{ $users->appends(Request::except('page'))->links() }}
+    <p>
+      Found <strong>{{ $users->getTotal() }}</strong> {{ ($users->getTotal()>1) ? 'users' : 'user'  }}, showing {{ $users->count() }} {{ ($users->count()>1) ? 'users' : 'user' }}
+    </p>
     <table class="table table-striped table-bordered">
         <thead>
             <tr>

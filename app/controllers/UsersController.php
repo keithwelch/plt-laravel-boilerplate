@@ -44,7 +44,7 @@ class UsersController extends \BaseController {
     $user = User::where('email', '=', $input['email'])->where('is_active', 0)->get();
     if (count($user)) $error='Your account is inactive';
 
-    return Redirect::route('user.login')->with('loginError', $error);
+    return Redirect::route('user.login')->withInput()->with('loginError', $error);
   }
 
   public function getSignup()
@@ -72,6 +72,40 @@ class UsersController extends \BaseController {
       ->withInput()
       ->withErrors($validation);
 	}
+
+  public function getAccount()
+  {
+    $user = Auth::user();
+    return View::make('user.account', compact('user'));
+  }
+
+  public function postAccount()
+  {
+    $input = array_except(Input::all(), array('_method'));
+    // Not using User::$rules here because of unique:users,email,USER_ID
+    $rules = array(
+      'email'=>'required|email|unique:users,email,'.Auth::user()->id,
+      'password'=>'required|min:6|confirmed',
+    );
+    if (empty($input['password'])) {
+      unset($input['password']);
+      unset($rules['password']);
+    }
+    $validation = Validator::make($input, $rules);
+
+    if ($validation->passes())
+    {
+        $user = Auth::user();
+        $user->email = $input['email'];
+        if (!empty($input['password'])) $user->password = Hash::make($input['password']);
+        $user->save();
+        return Redirect::route('user.account')->with('status', 'Your account has been updated');
+    }
+
+    return Redirect::route('user.account')
+        ->withInput()
+        ->withErrors($validation);
+  }
 
   public function getLogout()
   {

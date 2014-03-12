@@ -21,8 +21,11 @@ class AdminUsersController extends \BaseController {
      */
     public function index()
     {
-        $users = $this->user->where('id', '<>', Auth::user()->id)->get();
-        return View::make('admin.users.index', compact('users'));
+      $users = $this->user->where('id', '<>', Auth::user()->id)->orderBy('email');
+      if (Input::get('admin')) $users = $users->where('is_admin', Input::get('admin') ? 1 : 0);
+      if (Input::get('active')) $users = $users->where('is_active', Input::get('active') ? 1: 0);
+      $users = $users->paginate(10);
+      return View::make('admin.users.index', compact('users'));
     }
 
     /**
@@ -54,7 +57,7 @@ class AdminUsersController extends \BaseController {
             $user->is_admin=isset($input['is_admin']) ? true : false;
             $user->save();
 
-            return Redirect::route('admin.users.index');
+            return Redirect::route('admin.users.index')->with('status', 'Added new account for '.$user->email);
         }
 
         return Redirect::route('admin.users.create')
@@ -122,7 +125,7 @@ class AdminUsersController extends \BaseController {
             $user->is_active = isset($input['is_active']) ? true : false;
             $user->is_admin=isset($input['is_admin']) ? true : false;
             $user->save();
-            return Redirect::route('admin.users.index');
+            return Redirect::route('admin.users.index')->with('status', 'Updated account for '.$user->email);
         }
 
         return Redirect::route('admin.users.edit', $id)
@@ -138,9 +141,10 @@ class AdminUsersController extends \BaseController {
      */
     public function destroy($id)
     {
-        $this->user->find($id)->delete();
-
-        return Redirect::route('admin.users.index');
+      $user = $this->user->findOrFail($id);
+      $email_was = $user->email;
+      $user->delete();
+      return Redirect::route('admin.users.index')->with('status', 'Account for '.$email_was.' was deleted');
     }
 
 }

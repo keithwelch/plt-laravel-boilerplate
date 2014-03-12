@@ -18,30 +18,56 @@
 </head>
 <body>
 
-  <div class="container">
-    <div class="header">
-      <ul class="nav nav-pills pull-right">
-        <li @if (Route::currentRouteName()=='home') class="active" @endif><a href="{{ URL::route('home') }}">Home</a></li>
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="{{ URL::route('home') }}">{{ Config::get('site.sitename') }}</a>
+        </div>
+        <div class="navbar-collapse collapse">
 @if (Auth::check())
-        <li @if (Route::currentRouteName()=='user.dashboard') class="active" @endif><a href="{{ URL::route('user.dashboard') }}">Dashboard</a></li>
+          <ul class="nav navbar-nav">
+            <li @if (Route::currentRouteName()=='user.dashboard') class="active" @endif><a href="{{ URL::route('user.dashboard') }}">Dashboard</a></li>
+            <li @if (Route::currentRouteName()=='user.account') class="active" @endif><a href="{{ URL::route('user.account') }}">My Account</a></li>
 @if (Auth::user()->is_admin)
-        <li @if (starts_with(Route::currentRouteName(), 'admin.users')) class="active" @endif><a href="{{ URL::route('admin.users.index') }}">Edit Users</a></li>
+            <li @if (starts_with(Route::currentRouteName(), 'admin.users')) class="active" @endif><a href="{{ URL::route('admin.users.index') }}">Manage Users</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{{ URL::route('user.logout') }}">Logout</a></li>
+          </ul>
 @endif
-        <li><a href="{{ URL::route('user.logout') }}">Logout</a></li>
 @else
-        <li @if (Route::currentRouteName()=='user.signup') class="active" @endif><a href="{{ URL::route('user.signup') }}">Sign up</a></li>
-        <li @if (Route::currentRouteName()=='user.login') class="active" @endif><a href="{{ URL::route('user.login') }}">Login</a></li>
+          {{ Form::open(array('route'=>'user.login.post', 'class'=>'navbar-form navbar-right', 'role'=>'form')) }}
+          <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" name="email" placeholder="Email" class="form-control col-sm-3">
+            </div>
+            <div class="form-group">
+              <input type="password" name="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          {{ Form::close() }}
 @endif
-      </ul>
-      <h3 class="text-muted">{{{ Config::get('site.sitename') }}}</h3>
+          </ul>
+        </div><!--/.navbar-collapse -->
+      </div>
     </div>
 
+    <div class="container">
+      <div class="main-content">
 @yield('content')
+      </div>
 
-    <div class="footer">
-      <p>&copy; {{{ Config::get('site.sitename') }}} 2014</p>
-    </div>
-  </div> <!-- /container -->
+      <hr>
+      <div class="footer">
+        <p>&copy; {{ date('Y') }} {{{ Config::get('site.sitename') }}}</p>
+      </div>
+    </div> <!-- /container -->
 
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="{{ URL::asset('/js/jquery.min.js') }}"></script>
