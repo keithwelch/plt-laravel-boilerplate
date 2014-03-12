@@ -11,7 +11,7 @@
 @endif
   <div class="form-group">
     <label for="email">Email address</label>
-    <input type="email" name="email" class="form-control" id="email" placeholder="Enter email">
+    <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" value="{{ Input::old('email') }}">
   </div>
   <div class="form-group">
     <label for="password">Password:</label>
@@ -23,12 +23,15 @@
   </div>
   <div class="checkbox">
     <label>
-      <input type="checkbox" name="is_active"> Active
+      <input type="checkbox" name="is_active" checked> Active
+    </label>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" name="is_admin"> Admin
     </label>
   </div>
   {{ Form::submit('Create', array('class' => 'btn btn-info')) }}
   {{ link_to_route('admin.users.index', 'Cancel', null, array('class' => 'btn')) }}
 {{ Form::close() }}
 @stop
-
-

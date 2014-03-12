@@ -21,8 +21,7 @@ class AdminUsersController extends \BaseController {
      */
     public function index()
     {
-        $users = $this->user->all();
-
+        $users = $this->user->where('id', '<>', Auth::user()->id)->get();
         return View::make('admin.users.index', compact('users'));
     }
 
@@ -51,7 +50,8 @@ class AdminUsersController extends \BaseController {
             $user = new User;
             $user->email=$input['email'];
             $user->password=Hash::make($input['password']);
-            $user->is_active=true;
+            $user->is_active = isset($input['is_active']) ? true : false;
+            $user->is_admin=isset($input['is_admin']) ? true : false;
             $user->save();
 
             return Redirect::route('admin.users.index');
@@ -59,8 +59,7 @@ class AdminUsersController extends \BaseController {
 
         return Redirect::route('admin.users.create')
             ->withInput()
-            ->withErrors($validation)
-            ->with('flash', 'There were validation errors.');
+            ->withErrors($validation);
     }
 
     /**
@@ -121,14 +120,14 @@ class AdminUsersController extends \BaseController {
             $user->email = $input['email'];
             if (!empty($input['password'])) $user->password = Hash::make($input['password']);
             $user->is_active = isset($input['is_active']) ? true : false;
+            $user->is_admin=isset($input['is_admin']) ? true : false;
             $user->save();
             return Redirect::route('admin.users.index');
         }
 
         return Redirect::route('admin.users.edit', $id)
             ->withInput()
-            ->withErrors($validation)
-            ->with('flash', 'There were validation errors.');
+            ->withErrors($validation);
     }
 
     /**

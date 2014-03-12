@@ -41,7 +41,7 @@ class UsersController extends \BaseController {
     if ($attempt) return Redirect::intended('dashboard');
 
     $error = 'Invalid username or password.';
-    $user = User::where('email', '=', $input['email']);
+    $user = User::where('email', '=', $input['email'])->where('is_active', 0)->get();
     if (count($user)) $error='Your account is inactive';
 
     return Redirect::route('user.login')->with('loginError', $error);
@@ -71,7 +71,6 @@ class UsersController extends \BaseController {
     return Redirect::route('user.signup')
       ->withInput()
       ->withErrors($validation);
-
 	}
 
   public function getLogout()

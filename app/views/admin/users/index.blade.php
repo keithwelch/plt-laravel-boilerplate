@@ -12,6 +12,7 @@
             <tr>
                 <th>Email</th>
                 <th>Active</th>
+                <th>Admin</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
@@ -22,6 +23,7 @@
                 <tr>
                     <td>{{ $user->email }}</td>
                     <td>{{ ($user->is_active) ? 'Yes' : 'No' }}</td>
+                    <td>{{ ($user->is_admin) ? 'Yes' : 'No' }}</td>
                     <td>{{ link_to_route('admin.users.edit', 'Edit', array($user->id), array('class' => 'btn btn-info')) }}</td>
                     <td>
                         {{ Form::open(array('method' => 'DELETE', 'route' => array('admin.users.destroy', $user->id))) }}
