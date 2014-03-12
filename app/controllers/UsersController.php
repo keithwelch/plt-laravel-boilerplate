@@ -62,7 +62,7 @@ class UsersController extends \BaseController {
         $user = new User;
         $user->email=$input['email'];
         $user->password=Hash::make($input['password']);
-        $user->is_active=true;
+        $user->is_active = Config::get('site.signup_active_default');
         $user->save();
 
         return Redirect::route('user.login');

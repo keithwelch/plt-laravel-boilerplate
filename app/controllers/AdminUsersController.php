@@ -102,15 +102,27 @@ class AdminUsersController extends \BaseController {
      */
     public function update($id)
     {
-        $input = array_except(Input::all(), '_method');
-        $validation = Validator::make($input, User::$rules);
+        $input = array_except(Input::all(), array('_method'));
+        // Not using User::$rules here because of unique:users,email,USER_ID
+        $rules = array(
+          'email'=>'required|email|unique:users,email,'.$id,
+          'password'=>'required|min:6|confirmed',
+        );
+        if (empty($input['password'])) {
+          unset($input['password']);
+          unset($rules['password']);
+        }
+        $validation = Validator::make($input, $rules);
 
         if ($validation->passes())
         {
             $user = $this->user->find($id);
-            $user->update($input);
-
-            return Redirect::route('admin.users.show', $id);
+            if (!empty($input['password'])) Hash::make($input['password']);
+            $user->email = $input['email'];
+            if (!empty($input['password'])) $user->password = Hash::make($input['password']);
+            $user->is_active = isset($input['is_active']) ? true : false;
+            $user->save();
+            return Redirect::route('admin.users.index');
         }
 
         return Redirect::route('admin.users.edit', $id)

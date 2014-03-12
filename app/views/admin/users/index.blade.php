@@ -11,7 +11,9 @@
         <thead>
             <tr>
                 <th>Email</th>
-        <th>Password</th>
+                <th>Active</th>
+                <th>Edit</th>
+                <th>Delete</th>
             </tr>
         </thead>
 
@@ -19,7 +21,7 @@
             @foreach ($users as $user)
                 <tr>
                     <td>{{ $user->email }}</td>
-          <td>{{ $user->password }}</td>
+                    <td>{{ ($user->is_active) ? 'Yes' : 'No' }}</td>
                     <td>{{ link_to_route('admin.users.edit', 'Edit', array($user->id), array('class' => 'btn btn-info')) }}</td>
                     <td>
                         {{ Form::open(array('method' => 'DELETE', 'route' => array('admin.users.destroy', $user->id))) }}
