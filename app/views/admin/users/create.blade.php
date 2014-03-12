@@ -31,7 +31,7 @@
       <input type="checkbox" name="is_admin"> Admin
     </label>
   </div>
-  {{ Form::submit('Create', array('class' => 'btn btn-info')) }}
-  {{ link_to_route('admin.users.index', 'Cancel', null, array('class' => 'btn')) }}
+  {{ Form::submit('Create', array('class' => 'btn btn-success')) }}
+  {{ link_to_route('admin.users.index', 'Cancel', null, array('class' => 'btn btn-default')) }}
 {{ Form::close() }}
 @stop

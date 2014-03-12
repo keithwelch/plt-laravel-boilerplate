@@ -11,7 +11,7 @@ class AdminUsersController extends \BaseController {
 
     public function __construct(User $user)
     {
-        $this->user = $user;
+      $this->user = $user;
     }
 
     /**
@@ -35,7 +35,7 @@ class AdminUsersController extends \BaseController {
      */
     public function create()
     {
-        return View::make('admin.users.create');
+      return View::make('admin.users.create');
     }
 
     /**
@@ -45,24 +45,24 @@ class AdminUsersController extends \BaseController {
      */
     public function store()
     {
-        $input = Input::all();
-        $validation = Validator::make($input, User::$rules);
+      $input = Input::all();
+      $validation = Validator::make($input, User::$rules);
 
-        if ($validation->passes())
-        {
-            $user = new User;
-            $user->email=$input['email'];
-            $user->password=Hash::make($input['password']);
-            $user->is_active = isset($input['is_active']) ? true : false;
-            $user->is_admin=isset($input['is_admin']) ? true : false;
-            $user->save();
+      if ($validation->passes())
+      {
+        $user = new User;
+        $user->email=$input['email'];
+        $user->password=Hash::make($input['password']);
+        $user->is_active = isset($input['is_active']) ? true : false;
+        $user->is_admin=isset($input['is_admin']) ? true : false;
+        $user->save();
 
-            return Redirect::route('admin.users.index')->with('status', 'Added new account for '.$user->email);
-        }
+        return Redirect::route('admin.users.index')->with('status', 'Added new account for '.$user->email);
+      }
 
-        return Redirect::route('admin.users.create')
-            ->withInput()
-            ->withErrors($validation);
+      return Redirect::route('admin.users.create')
+        ->withInput()
+        ->withErrors($validation);
     }
 
     /**
@@ -73,9 +73,9 @@ class AdminUsersController extends \BaseController {
      */
     public function show($id)
     {
-        $user = $this->user->findOrFail($id);
-
-        return View::make('admin.users.show', compact('user'));
+      return Redirect::route('admin.users.index');
+      #$user = $this->user->findOrFail($id);
+      #return View::make('admin.users.show', compact('user'));
     }
 
     /**
@@ -86,14 +86,11 @@ class AdminUsersController extends \BaseController {
      */
     public function edit($id)
     {
-        $user = $this->user->find($id);
-
-        if (is_null($user))
-        {
-            return Redirect::route('admin.users.index');
-        }
-
-        return View::make('admin.users.edit', compact('user'));
+      $user = $this->user->find($id);
+      if (is_null($user)) {
+        return Redirect::route('admin.users.index');
+      }
+      return View::make('admin.users.edit', compact('user'));
     }
 
     /**
@@ -104,33 +101,34 @@ class AdminUsersController extends \BaseController {
      */
     public function update($id)
     {
-        $input = array_except(Input::all(), array('_method'));
-        // Not using User::$rules here because of unique:users,email,USER_ID
-        $rules = array(
-          'email'=>'required|email|unique:users,email,'.$id,
-          'password'=>'required|min:6|confirmed',
-        );
-        if (empty($input['password'])) {
-          unset($input['password']);
-          unset($rules['password']);
-        }
-        $validation = Validator::make($input, $rules);
+      $input = array_except(Input::all(), array('_method'));
+      // Not using User::$rules here because of unique:users,email,USER_ID
+      $rules = array(
+        'email'=>'required|email|unique:users,email,'.$id,
+        'password'=>'required|min:6|confirmed',
+      );
+      if (empty($input['password'])) {
+        unset($input['password']);
+        unset($rules['password']);
+      }
 
-        if ($validation->passes())
-        {
-            $user = $this->user->find($id);
-            if (!empty($input['password'])) Hash::make($input['password']);
-            $user->email = $input['email'];
-            if (!empty($input['password'])) $user->password = Hash::make($input['password']);
-            $user->is_active = isset($input['is_active']) ? true : false;
-            $user->is_admin=isset($input['is_admin']) ? true : false;
-            $user->save();
-            return Redirect::route('admin.users.index')->with('status', 'Updated account for '.$user->email);
-        }
+      $validation = Validator::make($input, $rules);
 
-        return Redirect::route('admin.users.edit', $id)
-            ->withInput()
-            ->withErrors($validation);
+      if ($validation->passes())
+      {
+        $user = $this->user->find($id);
+        if (!empty($input['password'])) Hash::make($input['password']);
+        $user->email = $input['email'];
+        if (!empty($input['password'])) $user->password = Hash::make($input['password']);
+        $user->is_active = isset($input['is_active']) ? true : false;
+        $user->is_admin=isset($input['is_admin']) ? true : false;
+        $user->save();
+        return Redirect::route('admin.users.index')->with('status', 'Updated account for '.$user->email);
+      }
+
+      return Redirect::route('admin.users.edit', $id)
+          ->withInput()
+          ->withErrors($validation);
     }
 
     /**

@@ -14,10 +14,8 @@
     <label for="password">Password:</label>
     <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
   </div>
-  <button class="btn btn-lg btn-primary" type="submit">Sign in</button>
-  <hr/>
-  <a href="{{ URL::route('user.signup') }}" class="btn btn-lg">Sign up</a>
-  <hr/>
-  <a href="{{ URL::route('password.remind') }}" class="btn btn-lg">Forget password?</a>
+  <button class="btn btn-lg btn-success" type="submit">Sign in</button>
+  <a href="{{ URL::route('password.remind') }}" class="btn btn-lg btn-default">Forget password</a>
+  <a href="{{ URL::route('user.signup') }}" class="btn btn-lg btn-default">Sign up</a>
 {{ Form::close() }}
 @stop

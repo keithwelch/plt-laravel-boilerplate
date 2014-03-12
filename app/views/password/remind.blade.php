@@ -13,8 +13,7 @@
     <label for="email">Email address</label>
     <input type="email" name="email" class="form-control" id="email" placeholder="Enter email" value="{{ Input::old('email') }}" required autofocus>
   </div>
-  <button class="btn btn-lg btn-primary" type="submit">Send Reminder</button>
-  <hr/>
-  <a href="{{ URL::route('user.login') }}" class="btn btn-lg">Login</a>
+  <button class="btn btn-lg btn-success" type="submit">Send Reminder</button>
+  <a href="{{ URL::route('user.login') }}" class="btn btn-lg btn-default">Login</a>
 {{ Form::close() }}
 @stop

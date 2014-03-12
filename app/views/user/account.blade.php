@@ -24,6 +24,6 @@
     <label for="password_confirmation">Password Confirm:</label>
     <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="New Password Confirm">
   </div>
-  {{ Form::submit('Update', array('class' => 'btn btn-info')) }}
+  {{ Form::submit('Update', array('class' => 'btn btn-lg btn-success')) }}
 {{ Form::close() }}
 @stop

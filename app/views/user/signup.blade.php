@@ -18,8 +18,7 @@
     <label for="password_confirmation">Password Confirm:</label>
     <input type="password" name="password_confirmation" class="form-control" id="password_confirmation" placeholder="Password Confirm" required>
   </div>
-  <button class="btn btn-lg btn-primary" type="submit">Sign up</button>
-  <hr/>
-  <a href="{{ URL::route('user.login') }}" class="btn btn-lg">Login</a>
+  <button class="btn btn-lg btn-success" type="submit">Sign up</button>
+  <a href="{{ URL::route('user.login') }}" class="btn btn-lg btn-default">Login</a>
 {{ Form::close() }}
 @stop

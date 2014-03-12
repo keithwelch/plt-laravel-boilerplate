@@ -103,8 +103,8 @@ class UsersController extends \BaseController {
     }
 
     return Redirect::route('user.account')
-        ->withInput()
-        ->withErrors($validation);
+      ->withInput()
+      ->withErrors($validation);
   }
 
   public function getLogout()
