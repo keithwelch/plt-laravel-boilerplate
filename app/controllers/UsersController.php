@@ -31,7 +31,7 @@ class UsersController extends \BaseController {
 
     $attempt = Auth::attempt(
       array(
-        'email' => $input['email'],
+        'email' => strtolower($input['email']),
         'password' => $input['password'],
         'is_active' => 1,
       ),

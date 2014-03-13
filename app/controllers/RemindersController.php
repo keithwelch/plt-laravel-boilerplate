@@ -24,7 +24,9 @@ class RemindersController extends \BaseController {
 	 */
 	public function postRemind()
 	{
-		switch ($response = Password::remind(Input::only('email')))
+    $input = Input::only('email');
+    $input['email'] = strtolower($input['email']);
+		switch ($response = Password::remind($input))
 		{
 			case Password::INVALID_USER:
 				return Redirect::back()->with('error', Lang::get($response));
@@ -57,6 +59,7 @@ class RemindersController extends \BaseController {
 		$credentials = Input::only(
 			'email', 'password', 'password_confirmation', 'token'
 		);
+    $credentials['email']=strtolower($credentials['email']);
 
 		$response = Password::reset($credentials, function($user, $password)
 		{

@@ -36,11 +36,11 @@
             <li @if (Route::currentRouteName()=='user.account') class="active" @endif><a href="{{ URL::route('user.account') }}">My Account</a></li>
 @if (Auth::user()->is_admin)
             <li @if (starts_with(Route::currentRouteName(), 'admin.users')) class="active" @endif><a href="{{ URL::route('admin.users.index') }}">Manage Users</a></li>
+@endif
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ URL::route('user.logout') }}">Logout</a></li>
           </ul>
-@endif
 @else
           {{ Form::open(array('route'=>'user.login.post', 'class'=>'navbar-form navbar-right', 'role'=>'form')) }}
           <form class="navbar-form navbar-right" role="form">
