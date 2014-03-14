@@ -26,8 +26,10 @@ class RemindersController extends \BaseController {
 	{
     $input = Input::only('email');
     $input['email'] = strtolower($input['email']);
-		switch ($response = Password::remind($input))
-		{
+    $response = Password::remind($input, function($message) {
+      $message->subject('Password reminder');
+    });
+		switch ($response) {
 			case Password::INVALID_USER:
 				return Redirect::back()->with('error', Lang::get($response));
 
