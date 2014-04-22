@@ -32,8 +32,8 @@
         <div class="navbar-collapse collapse">
 @if (Auth::check())
           <ul class="nav navbar-nav">
-            <li @if (Route::currentRouteName()=='user.dashboard') class="active" @endif><a href="{{ URL::route('user.dashboard') }}">Dashboard</a></li>
-            <li @if (Route::currentRouteName()=='user.account') class="active" @endif><a href="{{ URL::route('user.account') }}">My Account</a></li>
+            <li @if (Route::is('user.dashboard')) class="active" @endif><a href="{{ URL::route('user.dashboard') }}">Dashboard</a></li>
+            <li @if (Route::is('user.account')) class="active" @endif><a href="{{ URL::route('user.account') }}">My Account</a></li>
 @if (Auth::user()->is_admin)
             <li @if (starts_with(Route::currentRouteName(), 'admin.users')) class="active" @endif><a href="{{ URL::route('admin.users.index') }}">Manage Users</a></li>
 @endif
@@ -59,7 +59,7 @@
     </div>
 
     <div class="container">
-      <div class="main-content">
+      <div class="main-content row">
 @yield('content')
       </div>
 

@@ -27,6 +27,7 @@ Route::controller('user', 'UsersController', array(
 ));
 // Had to add this to get named route correct
 Route::get('dashboard', array('as' => 'user.dashboard', 'uses' => 'UsersController@getIndex'));
+
 Route::controller('password', 'RemindersController', array(
   'getRemind' => 'password.remind',
   'postRemind' => 'password.remind.post', 

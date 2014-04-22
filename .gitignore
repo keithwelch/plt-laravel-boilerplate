@@ -5,3 +5,4 @@ composer.lock
 .DS_Store
 /app/config/local
 /app/database/localdev.sqlite
+tags
